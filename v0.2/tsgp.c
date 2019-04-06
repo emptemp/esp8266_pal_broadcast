@@ -14,8 +14,8 @@
  - compatibility with any dimension
  - fontsize doubler via rect()? 
  - draw_bmp.c still buggy af. header?
+ - character rotation, plotter, ...
 */
-
 
 // inverts pixeldot
 void xdot(uint16_t x, uint16_t y)
@@ -31,7 +31,7 @@ void dot(uint16_t x, uint16_t y)
   fbuf[GETBUFPOS(x,y)] = 0x00 << (WORDSIZE-1-(x%WORDSIZE));
 }
 
-// ©bresenham line algorithm c
+// ©bresenham line algorithm
 void line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 {
   int16_t dx = abs(x1-x0);
