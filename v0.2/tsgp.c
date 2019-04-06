@@ -110,10 +110,8 @@ void print_str(uint16_t x, uint16_t y, char* str)
 int main()
 {
   printf("TSGP v0.2\n");
-  for(uint16_t i = 0; i < BUFFERSIZE; i++)
-  {
-    fbuf[i] = 0x00;
-  }
+  // set background black
+  memset(fbuf, 0x00, BUFFERSIZE);
 
   line(0,256,511,256);
   line(256,0,256,511);
