@@ -1,7 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file       TSGP_font.h
+/// @brief      contains 8x12 ascii charset 0x20 to 0x7F
+/// 
+/// @author     Gerald Tschinkl
+////////////////////////////////////////////////////////////////////////////////
+
 #include <stdio.h>
 #include <stdint.h>   //uint8_t etc.
 #include <string.h>   //strlen()
-#include "font.h"
+#include "font_ascii.h"
 #include "draw_bmp.c"
 
 // for sleep
@@ -10,11 +17,13 @@
 #include <math.h>
 
 /* TODO
- - sprintf to print_str MACRO
- - compatibility with any dimension (works?)
- - fontsize doubler via rect()? 
- - draw_bmp.c still buggy af. header?
- - character rotation, plotter, ...
+ > sprintf() to print_str() w/ MACRO
+ > compatibility with any dimension (works?)
+   - this is mainly a problem with the .bmp file format :(
+   - draw_bmp.c still buggy af. header?
+ > fontsize doubler via rect()? 
+ > sine without math.h
+ > character rotation, plotter, ...
 */
 
 // inverts pixeldot
@@ -120,15 +129,6 @@ int main()
   printf("TSGP v0.2\n");
   // set background black
   memset(fbuf, 0x00, BUFFERSIZE);
-
-//  line(1,1,1,103);
-//  line(1,103,211,103);
-
-  uint8_t temparr[200];
-//  memset(temparr, 0xFF, 200*2);
-  uint8_t i = 0;  
-  for(uint8_t i = 0; i < 200; i++)
-    temparr[i] = 200-i;
 
   line(0,HEIGHT/2,WIDTH-1,HEIGHT/2);
   line(WIDTH/2,0,WIDTH/2,HEIGHT-1);
