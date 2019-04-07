@@ -1,5 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file       TSGP_font.h
+/// @version    v0.3
 /// @brief      contains 8x12 ascii charset 0x20 to 0x7F
 /// 
 /// @author     Gerald Tschinkl

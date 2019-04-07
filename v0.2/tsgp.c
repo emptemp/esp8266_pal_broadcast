@@ -1,5 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file       TSGP_font.h
+/// @version    v0.3
 /// @brief      contains 8x12 ascii charset 0x20 to 0x7F
 /// 
 /// @author     Gerald Tschinkl
@@ -126,7 +127,7 @@ void print_str(uint16_t x, uint16_t y, char* str)
 
 int main()
 {
-  printf("TSGP v0.2\n");
+  printf("TSGP v0.3\n");
   // set background black
   memset(fbuf, 0x00, BUFFERSIZE);
 
@@ -146,7 +147,7 @@ int main()
   line(128, 0, 128, 104);
   line(1, 14, 128, 14);  
 
-  print_str(1,1, "TSGP v0.2   4/19"); 
+  print_str(1,1, "TSGP v0.3   4/19"); 
   for(uint8_t c=0x00; c<0x60; c++)
     print_chr(1+c%16*8, 20+c/16*14, c);
   
