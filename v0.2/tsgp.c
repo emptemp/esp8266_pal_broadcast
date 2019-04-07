@@ -11,7 +11,7 @@
 
 /* TODO
  - sprintf to print_str MACRO
- - compatibility with any dimension
+ - compatibility with any dimension (works?)
  - fontsize doubler via rect()? 
  - draw_bmp.c still buggy af. header?
  - character rotation, plotter, ...
@@ -21,14 +21,22 @@
 void xdot(uint16_t x, uint16_t y)
 {
   // calc position in buf and set 1
+#if ROTATE
+  fbuf[GETBUFPOS(x,y)] ^= 0x01 << y%WORDSIZE;
+#else
   fbuf[GETBUFPOS(x,y)] ^= 0x01 << (WORDSIZE-1-(x%WORDSIZE));
+#endif
 }
 
-// sets pixeldot
+// clears pixeldot
 void dot(uint16_t x, uint16_t y)
 {
   // calc position in buf and set 1
-  fbuf[GETBUFPOS(x,y)] = 0x00 << (WORDSIZE-1-(x%WORDSIZE));
+#if ROTATE
+  fbuf[GETBUFPOS(x,y)] &= 0x00 << y%WORDSIZE;
+#else
+  fbuf[GETBUFPOS(x,y)] &= 0x01 << (WORDSIZE-1-(x%WORDSIZE));
+#endif
 }
 
 // ©bresenham line algorithm
@@ -113,13 +121,25 @@ int main()
   // set background black
   memset(fbuf, 0x00, BUFFERSIZE);
 
-  line(0,256,511,256);
-  line(256,0,256,511);
+//  line(1,1,1,103);
+//  line(1,103,211,103);
 
-  for(uint16_t i = 8; i < 512; i=i*2) {
-    sine(0, 256, 511, i-1, 0xFF/i+1);     
-    sine_rot(256, 0, 511, i-1, 0xFF/i+1);
-  }
+  uint8_t temparr[200];
+//  memset(temparr, 0xFF, 200*2);
+  uint8_t i = 0;  
+  for(uint8_t i = 0; i < 200; i++)
+    temparr[i] = 200-i;
+
+  line(0,HEIGHT/2,WIDTH-1,HEIGHT/2);
+  line(WIDTH/2,0,WIDTH/2,HEIGHT-1);
+  
+  print_str(10,10,">:O|=<");
+
+  for(uint16_t i = 8; i < WIDTH; i=i*2)
+    sine(0, HEIGHT/2, WIDTH-1, i-1, 0xFF/i+1);     
+ 
+  for(uint16_t i = 8; i < HEIGHT; i=i*2)
+    sine_rot(WIDTH/2, 0, HEIGHT-1, i-1, 0xFF/i+1);
 
   rect(0, 0, 128, 104, 1);
   line(0, 104, 128, 104);
@@ -131,7 +151,6 @@ int main()
     print_chr(1+c%16*8, 20+c/16*14, c);
   
   print_str(333,130,">:O|=<");
-
   draw_bmp();
   printf("done writing\n%s\n", BMP_NAME);
   return 0;
