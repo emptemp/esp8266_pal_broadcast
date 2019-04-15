@@ -13,17 +13,17 @@
 #include "broadcast.h"
 #include <string.h>
 
-/*             ***   TODO   ***  
-   ============= PAL_BROADCAST ============
+/* ***************   TODO   ******************  
+   ============= PAL_BROADCAST ==============
  * revisit LEVELS in broadcast.h
    runs quite smooth on MATSUI but is still
    wacky on LQ 42" and possible other TV's
  * use 256 instead of 128 px width !!
-   ============== UDP SERVER ==============
+   ============== UDP SERVER ================
  * basic udp server + packet handling
  * should we get the whole frame via udp?
    - this could be smaller than actual fbuffer
-*/
+**********************************************/
 
 #define procTaskPrio 0
 #define procTaskQueueLen    1
@@ -45,9 +45,9 @@ void ICACHE_FLASH_ATTR procTask(os_event_t *events)
 	if( ipi.ip.addr || stat == 255 )
 	{
     ets_sprintf(printbuf, "IP: %d.%d.%d.%d", (ipi.ip.addr>>0)&0xff,
-                                               (ipi.ip.addr>>8)&0xff,
-                                              (ipi.ip.addr>>16)&0xff,
-                                              (ipi.ip.addr>>24)&0xff);
+                                             (ipi.ip.addr>>8)&0xff,
+                                             (ipi.ip.addr>>16)&0xff,
+                                             (ipi.ip.addr>>24)&0xff);
     print_str(4, 230, printbuf, 1, 2);
   }
   system_os_post(procTaskPrio, 0, 0 );
