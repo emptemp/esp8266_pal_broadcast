@@ -28,6 +28,16 @@ void ICACHE_FLASH_ATTR pal_broadcast(uint16_t isrs)
                 if(w)                    
                   fill_buf(p_buffer, k+32, k+33, WHITE_LEVEL);
               }
+             /* for(k=0; k<256; k++)  {
+                bool big = (fbuf[bufl+k/8] >> (WORDSIZE-1-(k%8))) & 0x01;
+                k++;
+                bool little = (fbuf[bufl+k/8] >> (WORDSIZE-1-(k%8))) & 0x01;
+                uint32_t level = little ? 0xFFFF:0x77fb;
+                level |= big ? 0xFFFF0000:0xeff70000;
+                if(little || big)                    
+                  fill_buf(p_buffer, (k/2)+32, (k/2)+33, level);
+              } */
+
               break;  
   }
 }

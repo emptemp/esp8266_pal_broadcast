@@ -60,6 +60,35 @@ void user_rf_pre_init(void)
 	//nothing.
 }
 
+int32 ICACHE_FLASH_ATTR esp_atoi(const char* in)
+{
+	int positive = 1; //1 if negative.
+	int hit = 0;
+	int val = 0;
+	while( *in && hit < 11 	)
+	{
+		if( *in == '-' )
+		{
+			if( positive == -1 ) return val*positive;
+			positive = -1;
+		} else if( *in >= '0' && *in <= '9' )
+		{
+			val *= 10;
+			val += *in - '0';
+			hit++;
+		} else if (!hit && ( *in == ' ' || *in == '\t' ) )
+		{
+			//okay
+		} else
+		{
+			//bad.
+			return val*positive;
+		}
+		in++;
+	}
+	return val*positive;
+}
+
 // called player got point
 static void ICACHE_FLASH_ATTR game_rst()
 {
@@ -130,26 +159,15 @@ void ICACHE_FLASH_ATTR procTask(os_event_t *events)
 // called when new packet comes in.
 static void ICACHE_FLASH_ATTR udpserver_recv(void *arg, char *data, unsigned short len)
 {
-	uart0_sendStr("X");
+  uart0_sendStr("X");
+  //struct espconn *pespconn = (struct espconn *)arg;
+  //ets_sprintf(stats_buf, "%s", pespconn->proto.udp->remote_ip);
+  //draw=1;
   ets_intr_lock();
   if(data)  {
-    //ets_sprintf(udp_buf, "%x", &data);
-    if(*data == 'w')  {
-      if(y_pos1 > ((RWIDTH/2)+BOTTOM_BORDER))
-        y_pos1-=STEP;    
-    }
-    else if(*data == 's') {
-      if(y_pos1 < (HEIGHT-(RWIDTH/2)-TOP_BORDER))
-        y_pos1+=STEP;
-    }    
-    else if(*data == 'o')  {
-      if(y_pos2 > ((RWIDTH/2)+BOTTOM_BORDER))
-        y_pos2-=STEP;    
-    }
-    else if(*data == 'l') {
-      if(y_pos2 < (HEIGHT-(RWIDTH/2)-TOP_BORDER))
-        y_pos2+=STEP;
-    }    
+    uint16_t y_udp = esp_atoi(data);
+    if(TOP_BORDER < y_udp && y_udp < HEIGHT-BOTTOM_BORDER-RWIDTH)
+      y_pos1 = y_udp;
     else if(*data == 'r') {
       game_rst();
       start=1;
